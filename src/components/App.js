@@ -1,6 +1,4 @@
 import React from "react";
-import "./App.css";
-import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -9,41 +7,24 @@ import FreeBreakfastIcon from "@material-ui/icons/FreeBreakfast";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
-
-const useStyles = makeStyles(theme => ({
-  appBar: {
-    flexGrow: 1
-  },
-  brandIcon: {
-    marginLeft: theme.spacing(2)
-  },
-  loginButton: {
-    marginLeft: "auto"
-  },
-  paper: {
-    marginTop: theme.spacing(10),
-    paddingTop: 40,
-    paddingBottom: 40,
-    textAlign: "center",
-    color: theme.palette.text.secondary
-  },
-  textField: {
-    width: 400
-  },
-  signUpButton: {
-    marginTop: theme.spacing(3)
-  }
-}));
+import useInputState from "../hooks/useInputState";
+import axios from "axios";
+import "./App.css";
+import useStyles from "./AppStyles";
 
 function App() {
   const classes = useStyles();
+  const [username, updateUsername, resetUsername] = useInputState("");
+  const [email, updateEmail, resetEmail] = useInputState("");
+  const [password, updatePassword, resetPassword] = useInputState("");
+  const [confirmPassword, updateConfirmPassword, resetConfirmPassword] = useInputState("");
 
   return (
     <div className='App'>
       <div>
         <AppBar position='static' className={classes.appBar}>
           <Toolbar>
-            <Typography variant='h6' className={classes.title}>
+            <Typography variant='h4' className={classes.title}>
               Coffee Club
             </Typography>
             <FreeBreakfastIcon outlined='true' className={classes.brandIcon} />
@@ -54,17 +35,78 @@ function App() {
         </AppBar>
         <Grid container className={classes.root} justify='space-around'>
           <Grid item xs={12} md={4}>
-            <Paper className={classes.paper} elevation='3'>
+            <Paper className={classes.paper} elevation={1}>
               <div>
                 <Typography variant='h5' color='textSecondary' className={classes.formTitle}>
                   Create an account
                 </Typography>
-                <TextField id='standard-basic' className={classes.textField} label='Username' margin='normal' />
-                <TextField id='standard-basic' className={classes.textField} label='Email' margin='normal' />
-                <TextField id='standard-basic' className={classes.textField} label='Password' margin='normal' />
-                <TextField id='standard-basic' className={classes.textField} label='Confirm Password' margin='normal' />
+                <TextField
+                  id='username'
+                  className={classes.textField}
+                  label='Username'
+                  margin='normal'
+                  onChange={updateUsername}
+                  value={username}
+                />
+                <TextField
+                  id='email'
+                  className={classes.textField}
+                  label='Email'
+                  margin='normal'
+                  onChange={updateEmail}
+                  value={email}
+                  required
+                />
+                <TextField
+                  id='password'
+                  className={classes.textField}
+                  label='Password'
+                  type='password'
+                  margin='normal'
+                  onChange={updatePassword}
+                  value={password}
+                  required
+                  helperText='at least 8 characters'
+                />
+                <TextField
+                  id='confirm-password'
+                  className={classes.textField}
+                  label='Confirm Password'
+                  type='password'
+                  margin='normal'
+                  onChange={updateConfirmPassword}
+                  value={confirmPassword}
+                  required
+                />
               </div>
-              <Button color='inherit' color='primary' size='medium' variant='outlined' className={classes.signUpButton}>
+              <Button
+                color='primary'
+                size='medium'
+                variant='contained'
+                className={classes.signUpButton}
+                onClick={e => {
+                  e.preventDefault();
+
+                  axios({
+                    method: "post",
+                    url: "http://localhost:3000/",
+                    data: {
+                      username,
+                      email,
+                      password
+                    }
+                  })
+                    .then(function(response) {
+                      resetUsername();
+                      resetEmail();
+                      resetPassword();
+                      resetConfirmPassword();
+                    })
+                    .catch(function(error) {
+                      console.error(error);
+                    });
+                }}
+              >
                 Sign Up
               </Button>
             </Paper>
