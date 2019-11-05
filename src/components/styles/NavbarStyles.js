@@ -4,6 +4,10 @@ export default makeStyles(theme => ({
   appBar: {
     flexGrow: 1
   },
+  routeLink: {
+    color: "inherit",
+    textDecoration: "none"
+  },
   title: {
     letterSpacing: "0.1em"
   },
@@ -11,7 +15,7 @@ export default makeStyles(theme => ({
     fontSize: "35px",
     marginLeft: theme.spacing(2)
   },
-  loginButton: {
+  navItems: {
     marginLeft: "auto"
   }
 }));

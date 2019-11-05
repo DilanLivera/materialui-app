@@ -1,20 +1,23 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Form from "./Form";
+import { Route } from "react-router-dom";
+import Home from "./Home";
+import SignupForm from "./SignupForm";
 import Navbar from "./Navbar";
+import Grid from "@material-ui/core/Grid";
+
 import "./styles/App.css";
 
 function App() {
   return (
     <div className='App'>
-      <div>
-        <Navbar />
-        <Grid container justify='space-around'>
-          <Grid item xs={12} md={4}>
-            <Form />
-          </Grid>
+      <Navbar />
+
+      <Grid container justify='space-around'>
+        <Grid item xs={12} s={6} md={4}>
+          <Route exact path='/' component={Home} />
+          <Route exact path='/signup' component={SignupForm} />
         </Grid>
-      </div>
+      </Grid>
     </div>
   );
 }

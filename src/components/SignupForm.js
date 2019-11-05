@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { withRouter } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
@@ -7,9 +8,9 @@ import TextField from "@material-ui/core/TextField";
 import useInputState from "./hooks/useInputState";
 import axios from "axios";
 import validator from "validator";
-import useStyles from "./styles/FormStyles";
+import useStyles from "./styles/SignupFormStyles";
 
-function Form() {
+function SignupForm(props) {
   const classes = useStyles();
   const [username, updateUsername, resetUsername] = useInputState("");
   const [validUsername, setUserNameValid] = useState(true);
@@ -90,7 +91,6 @@ function Form() {
         className={classes.signUpButton}
         onClick={e => {
           e.preventDefault();
-
           if (isInputsValid()) {
             axios({
               method: "post",
@@ -106,6 +106,7 @@ function Form() {
                 resetEmail();
                 resetPassword();
                 resetConfirmPassword();
+                props.history.push("/");
               })
               .catch(function(error) {
                 console.error(error);
@@ -119,4 +120,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default withRouter(SignupForm);
